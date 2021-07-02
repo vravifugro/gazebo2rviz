@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/python3
 
 from __future__ import print_function
 
@@ -10,6 +10,9 @@ import tf_conversions.posemath as pm
 from tf.transformations import *
 
 import pysdf
+from pysdf_conversions import *
+from naming import *
+from parse import *
 
 tfBroadcaster = None
 submodelsToBeIgnored = []
@@ -37,17 +40,17 @@ def on_link_states_msg(link_states_msg):
 
   poses = {'gazebo_world': identity_matrix()}
   for (link_idx, link_name) in enumerate(link_states_msg.name):
-    poses[link_name] = pysdf.pose_msg2homogeneous(link_states_msg.pose[link_idx])
+    poses[link_name] = pose_msg2homogeneous(link_states_msg.pose[link_idx])
     #print('%s:\n%s' % (link_name, poses[link_name]))
 
   for (link_idx, link_name) in enumerate(link_states_msg.name):
     #print(link_idx, link_name)
     modelinstance_name = link_name.split('::')[0]
     #print('modelinstance_name:', modelinstance_name)
-    model_name = pysdf.name2modelname(modelinstance_name)
+    model_name = name2modelname(modelinstance_name)
     #print('model_name:', model_name)
     if not model_name in model_cache:
-      sdf = pysdf.SDF(model=model_name)
+      sdf = SDF(model=model_name)
       model_cache[model_name] = sdf.world.models[0] if len(sdf.world.models) >= 1 else None
       if model_cache[model_name]:
         rospy.loginfo('Loaded model: %s' % model_cache[model_name].name)
@@ -73,9 +76,9 @@ def on_link_states_msg(link_states_msg):
     pose = poses[link_name]
     parent_pose = poses[parentinstance_link_name]
     rel_tf = concatenate_matrices(inverse_matrix(parent_pose), pose)
-    translation, quaternion = pysdf.homogeneous2translation_quaternion(rel_tf)
+    translation, quaternion = homogeneous2translation_quaternion(rel_tf)
     #print('Publishing TF %s -> %s: t=%s q=%s' % (pysdf.sdf2tfname(parentinstance_link_name), pysdf.sdf2tfname(link_name), translation, quaternion))
-    tfBroadcaster.sendTransform(translation, quaternion, rospy.get_rostime(), pysdf.sdf2tfname(link_name), pysdf.sdf2tfname(parentinstance_link_name))
+    tfBroadcaster.sendTransform(translation, quaternion, rospy.get_rostime(), sdf2tfname(link_name), sdf2tfname(parentinstance_link_name))
 
 
 

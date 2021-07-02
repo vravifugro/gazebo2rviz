@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/python3
 
 from __future__ import print_function
 
@@ -10,7 +10,12 @@ from gazebo_msgs.msg import ModelStates
 from visualization_msgs.msg import Marker
 
 import pysdf
-from gazebo2rviz import *
+#from gazebo2rviz import *
+from conversions import link2marker_msg
+from pysdf_conversions import *
+from naming import *
+from parse import *
+
 
 
 updatePeriod = 0.5
@@ -43,7 +48,7 @@ def on_model_states_msg(model_states_msg):
 
   for (model_idx, modelinstance_name) in enumerate(model_states_msg.name):
     #print(model_idx, modelinstance_name)
-    model_name = pysdf.name2modelname(modelinstance_name)
+    model_name = name2modelname(modelinstance_name)
     #print('model_name:', model_name)
     if not model_name in model_cache:
       model_cache[model_name] = None
@@ -53,7 +58,7 @@ def on_model_states_msg(model_states_msg):
             model_cache[model_name] = model
             break
       else:
-        sdf = pysdf.SDF(model=model_name)
+        sdf = SDF(model=model_name)
         if len(sdf.world.models) >= 1:
           model_cache[model_name] = sdf.world.models[0]
       if model_cache[model_name]:
@@ -91,7 +96,7 @@ def main():
 
   if args.worldfile:
     global worldsdf
-    worldsdf = pysdf.SDF(file=args.worldfile)
+    worldsdf = SDF(file=args.worldfile)
 
   global markerPub
   markerPub = rospy.Publisher('/visualization_marker', Marker, queue_size=10)
