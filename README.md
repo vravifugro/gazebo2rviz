@@ -17,7 +17,7 @@ Refer this article for a better overview on the work-logic behind it
 - cd `~/ros_ws` && run `catkin_make`
 - In a new terminal, Spin up a gazebo instance, `rosrun gazebo_ros gazebo` and start adding sdf parts from the 'Insert' panel 
 - In a new terminal, Spin up RVIZ `rosrun rviz rviz` and change `global frame -> world` and include the `marker` plugin from 'Add'.
-- From your cd `~/ros_ws`, spin up a terminal and run 
+- Then, `cd  ~/ros_ws`, spin up a terminal and run 
   `roslaunch gazebo2rviz gazebo2rviz.launch`, now you will see the Gazebo parts translated in RVIZ with relative update based on addition/movement/deletion and morphing of the objects.
   
 
