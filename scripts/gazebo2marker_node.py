@@ -9,7 +9,6 @@ import tf
 from gazebo_msgs.msg import ModelStates
 from visualization_msgs.msg import Marker
 
-import pysdf
 #from gazebo2rviz import *
 from conversions import link2marker_msg
 from pysdf_conversions import *

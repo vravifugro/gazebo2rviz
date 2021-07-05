@@ -9,7 +9,6 @@ from gazebo_msgs.msg import LinkStates
 import tf_conversions.posemath as pm
 from tf.transformations import *
 
-import pysdf
 from pysdf_conversions import *
 from naming import *
 from parse import *

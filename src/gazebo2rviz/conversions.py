@@ -6,7 +6,6 @@ import rospy
 from rospkg import RosPack, ResourceNotFound
 from visualization_msgs.msg import Marker
 
-import pysdf
 import os.path
 
 protoMarkerMsg = Marker()
